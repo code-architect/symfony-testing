@@ -21,13 +21,22 @@ class GenusController extends Controller
 //            'name'  => $genusName,
 //        ]);
 //        return new Response($html);
-        $notes = [
-            "hello"
-        ];
+        $notes = ["hello"];
+
         $funFact = "Octopuses can change the color of their body in just *three-tenths* of a second!";
 
-        $funFact = $this->container->get('markdown.parser')
-            ->transform($funFact);
+        $cache = $this->get('doctrine_cache.providers.my_markdown_cache');
+        $key = md5($funFact);
+
+        //checking if the same string have passed cache twice
+        if($cache->contains($key))
+        {
+            $funFact = $cache->fetch($key);
+        }else{
+            $funFact = $this->container->get('markdown.parser')
+                ->transform($funFact);
+        }
+
 
         return $this->render('genus/show.html.twig', [
             'name'  => $genusName,
