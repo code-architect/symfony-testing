@@ -24,15 +24,24 @@ class GenusController extends Controller
         $notes = [
             "hello"
         ];
+        $funFact = "Octopuses can change the color of their body in just *three-tenths* of a second!";
+
+        $funFact = $this->container->get('markdown.parser')
+            ->transform($funFact);
 
         return $this->render('genus/show.html.twig', [
             'name'  => $genusName,
             'notes' => $notes,
+            'funFact' => $funFact,
         ]);
     }
 
 
+    //------------------------------------------------------------------------------------------------------------------//
+
+
     /**
+     * This give us a JSON response object for api development
      * @Route("/genus/{genusName}/notes", name="genus_show_notes")
      * @Method("GET")
      */
