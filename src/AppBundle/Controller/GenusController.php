@@ -3,6 +3,7 @@
 namespace AppBundle\Controller;
 
 
+use AppBundle\Entity\Genus;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -11,6 +12,51 @@ use Symfony\Component\HttpFoundation\Response;
 
 class GenusController extends Controller
 {
+
+    /**
+     * @Route("/genus/new",)
+     */
+    public function newAction()
+    {
+        $genus = new Genus();
+        $genus->setName("Octopus".rand(1, 100));
+        $genus->setSubFamily('Octopodinae');
+        $genus->setSpeciesCount(rand(100, 1000));
+        //$genus->getFunFact("Octopus can change color with in 3rd of a second!! COOL!!");
+
+        $em = $this->getDoctrine()->getManager();
+
+        $em->persist($genus);           // This one tells doctrine that you want to save this
+        $em->flush();                   // this line execute the query
+
+        return new Response("<html><body>Data uploaded</body></html>");
+    }
+
+
+    //------------------------------------------------------------------------------------------------------------------//
+
+    /**
+     * List of all Genus Data in the database
+     * @Route("/genus")
+     */
+    public function listAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $genuses = $em->getRepository('AppBundle:Genus')
+            ->findAll();
+
+        return $this->render('genus/list.html.twig', [
+            'genuses' => $genuses,
+        ]);
+    }
+
+
+
+
+    //------------------------------------------------------------------------------------------------------------------//
+
+
     /**
      * @Route("/genus/{genusName}")
      */
