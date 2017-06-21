@@ -5,5 +5,4 @@ app:
 homepage:
     path: /
     defaults:
-      _controller: AppBundle:Main:homepage
-    methods: GET
+        _controller: AppBundle:Main:homepage

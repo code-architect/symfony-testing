@@ -7,13 +7,11 @@ use Doctrine\Common\DataFixtures\FixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 use Nelmio\Alice\Fixtures;
 
-
 class LoadFixtures implements FixtureInterface
 {
     public function load(ObjectManager $manager)
     {
-        //https://github.com/fzaninotto/Faker
-        Fixtures::load(
+        $objects = Fixtures::load(
             __DIR__.'/fixtures.yml',
             $manager,
             [
@@ -21,7 +19,6 @@ class LoadFixtures implements FixtureInterface
             ]
         );
     }
-
 
     public function genus()
     {
@@ -43,8 +40,7 @@ class LoadFixtures implements FixtureInterface
         ];
 
         $key = array_rand($genera);
+
         return $genera[$key];
     }
-
-
 }

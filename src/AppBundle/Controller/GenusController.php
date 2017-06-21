@@ -2,7 +2,6 @@
 
 namespace AppBundle\Controller;
 
-
 use AppBundle\Entity\Genus;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -12,31 +11,24 @@ use Symfony\Component\HttpFoundation\Response;
 
 class GenusController extends Controller
 {
-
     /**
-     * @Route("/genus/new",)
+     * @Route("/genus/new")
      */
     public function newAction()
     {
         $genus = new Genus();
-        $genus->setName("Octopus".rand(1, 100));
+        $genus->setName('Octopus'.rand(1, 100));
         $genus->setSubFamily('Octopodinae');
-        $genus->setSpeciesCount(rand(100, 1000));
-        //$genus->getFunFact("Octopus can change color with in 3rd of a second!! COOL!!");
+        $genus->setSpeciesCount(rand(100, 99999));
 
         $em = $this->getDoctrine()->getManager();
+        $em->persist($genus);
+        $em->flush();
 
-        $em->persist($genus);           // This one tells doctrine that you want to save this
-        $em->flush();                   // this line execute the query
-
-        return new Response("<html><body>Data uploaded</body></html>");
+        return new Response('<html><body>Genus created!</body></html>');
     }
 
-
-    //------------------------------------------------------------------------------------------------------------------//
-
     /**
-     * List of all Genus Data in the database
      * @Route("/genus")
      */
     public function listAction()
@@ -47,82 +39,59 @@ class GenusController extends Controller
             ->findAllPublishedOrderedBySize();
 
         return $this->render('genus/list.html.twig', [
-            'genuses' => $genuses,
+            'genuses' => $genuses
         ]);
     }
-
-
-
-
-    //------------------------------------------------------------------------------------------------------------------//
-
 
     /**
      * @Route("/genus/{genusName}", name="genus_show")
      */
     public function showAction($genusName)
     {
-//        $templeting = $this->container->get('templating');
-//        $html = $templeting->render('genus/show.html.twig', [
-//            'name'  => $genusName,
-//        ]);
-//        return new Response($html);
-        $notes = ["hello"];
-
-
-
         $em = $this->getDoctrine()->getManager();
+
         $genus = $em->getRepository('AppBundle:Genus')
             ->findOneBy(['name' => $genusName]);
 
-        //error handling
-        if(!$genus)
-        {
-            throw $this->createNotFoundException('No genus Found DUDE!!! SAD :(');
+        if (!$genus) {
+            throw $this->createNotFoundException('genus not found');
         }
 
-    /*
+        // todo - add the caching back later
+        /*
         $cache = $this->get('doctrine_cache.providers.my_markdown_cache');
         $key = md5($funFact);
-
-        //checking if the same string have passed cache twice
-        if($cache->contains($key))
-        {
+        if ($cache->contains($key)) {
             $funFact = $cache->fetch($key);
-        }else{
-            $funFact = $this->container->get('markdown.parser')
+        } else {
+            sleep(1); // fake how slow this could be
+            $funFact = $this->get('markdown.parser')
                 ->transform($funFact);
             $cache->save($key, $funFact);
         }
-    */
-        //dump($genus); die();
+        */
 
-        return $this->render('genus/show.html.twig', [
-            'genus' =>  $genus,
-            'notes' => $notes,
+        $this->get('logger')
+            ->info('Showing genus: '.$genusName);
 
-        ]);
+        return $this->render('genus/show.html.twig', array(
+            'genus' => $genus
+        ));
     }
 
-
-    //------------------------------------------------------------------------------------------------------------------//
-
-
     /**
-     * This give us a JSON response object for api development
      * @Route("/genus/{genusName}/notes", name="genus_show_notes")
      * @Method("GET")
      */
-    public function getNotesAction()
+    public function getNotesAction($genusName)
     {
         $notes = [
             ['id' => 1, 'username' => 'AquaPelham', 'avatarUri' => '/images/leanna.jpeg', 'note' => 'Octopus asked me a riddle, outsmarted me', 'date' => 'Dec. 10, 2015'],
             ['id' => 2, 'username' => 'AquaWeaver', 'avatarUri' => '/images/ryan.jpeg', 'note' => 'I counted 8 legs... as they wrapped around me', 'date' => 'Dec. 1, 2015'],
             ['id' => 3, 'username' => 'AquaPelham', 'avatarUri' => '/images/leanna.jpeg', 'note' => 'Inked!', 'date' => 'Aug. 20, 2015'],
         ];
-
         $data = [
-            'notes' =>  $notes,
+            'notes' => $notes
         ];
 
         return new JsonResponse($data);
