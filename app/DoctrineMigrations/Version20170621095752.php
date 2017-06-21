@@ -8,7 +8,7 @@ use Doctrine\DBAL\Schema\Schema;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-class Version20170620090724 extends AbstractMigration
+class Version20170621095752 extends AbstractMigration
 {
     /**
      * @param Schema $schema
@@ -29,6 +29,6 @@ class Version20170620090724 extends AbstractMigration
         // this down() migration is auto-generated, please modify it to your needs
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');
 
-        $this->addSql('ALTER TABLE genus CHANGE fun_fact fun_fact LONGTEXT NOT NULL COLLATE utf8_unicode_ci');
+        $this->addSql('ALTER TABLE genus CHANGE fun_fact fun_fact VARCHAR(255) DEFAULT NULL COLLATE utf8_unicode_ci');
     }
 }
