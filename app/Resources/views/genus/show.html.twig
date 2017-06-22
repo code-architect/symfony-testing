@@ -6,11 +6,11 @@
     <h2 class="genus-name">{{ genus.name }}</h2>
 
 
-    <a href="{{ path('genus_show_notes', {'name': genus.name}) }}">Get JSON Output</a>
     <div class="sea-creature-container">
         <div class="genus-photo"></div>
         <div class="genus-details">
             <dl class="genus-details-list">
+                <a class="text-center" href="{{ path('genus_show_notes', {'name': genus.name}) }}">Get The JSON Output of All The Notes</a>
                 <dt>Subfamily:</dt>
                 <dd>{{ genus.subFamily }}</dd>
                 <dt>Known Species:</dt>
