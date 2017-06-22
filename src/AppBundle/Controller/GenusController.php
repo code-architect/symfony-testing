@@ -91,11 +91,8 @@ class GenusController extends Controller
         $this->get('logger')
             ->info('Showing genus: '.$genusName);
 
-        // count all the notes for one genus    [don't do this in real world, performance issue]
-        $recentNotes = $genus->getNotes()
-            ->filter(function(GenusNote $note){
-                return $note->getCreatedAt() > new \DateTime('-3 months');
-            });
+        // count all the notes for one genus
+        $recentNotes = $em->getRepository('AppBundle:GenusNote')->findAllRecentNotesForGenus($genus);
 
         return $this->render('genus/show.html.twig', array(
             'genus' => $genus,
