@@ -5,19 +5,17 @@
 {% block body %}
     <h2 class="genus-name">{{ genus.name }}</h2>
 
-
     <div class="sea-creature-container">
         <div class="genus-photo"></div>
         <div class="genus-details">
             <dl class="genus-details-list">
-                <a class="text-center" href="{{ path('genus_show_notes', {'name': genus.name}) }}">Get The JSON Output of All The Notes</a>
                 <dt>Subfamily:</dt>
-                <dd>{{ genus.subFamily }}</dd>
+                <dd>{{ genus.subFamily.name }}</dd>
                 <dt>Known Species:</dt>
                 <dd>{{ genus.speciesCount|number_format }}</dd>
                 <dt>Fun Fact:</dt>
                 <dd>{{ genus.funFact|markdownify }}</dd>
-                <dt>Recent Notes in last 1 month</dt>
+                <dt>Recent Notes</dt>
                 <dd>{{ recentNoteCount }}</dd>
             </dl>
         </div>
@@ -36,8 +34,8 @@
         var notesUrl = '{{ path('genus_show_notes', {'name': genus.name}) }}';
 
         ReactDOM.render(
-          <NoteSection url={notesUrl} />,
-          document.getElementById('js-notes-wrapper')
+                <NoteSection url={notesUrl} />,
+            document.getElementById('js-notes-wrapper')
         );
     </script>
 {% endblock %}
