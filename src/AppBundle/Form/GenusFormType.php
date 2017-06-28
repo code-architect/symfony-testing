@@ -16,10 +16,14 @@ class GenusFormType extends AbstractType
             ->add('funFact');
     }
 
+
     public function configureOptions(OptionsResolver $resolver)
     {
-
+        $resolver->setDefaults([
+            'data_class'    =>  'AppBundle\Entity\Genus'
+        ]);
     }
+
 
     public function getBlockPrefix()
     {
