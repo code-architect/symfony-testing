@@ -51,6 +51,14 @@ class Genus
     private $isPublished = true;
 
     /**
+     * @return mixed
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
      * @Assert\NotBlank()
      * @ORM\Column(type="date")
      */
@@ -102,7 +110,7 @@ class Genus
 
     public function getFunFact()
     {
-        return '**TEST** '.$this->funFact;
+        return $this->funFact;
     }
 
     public function setFunFact($funFact)
